@@ -57,10 +57,7 @@ const TestimonialsSection = () => {
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <span className="section-badge mb-4 inline-block">
-            <MessageCircle className="w-4 h-4" />
-            Testimonials
-          </span>
+          
           <h2 className="font-display font-black text-3xl md:text-5xl mb-4">
             <span className="text-foreground">What Our</span>{' '}
             <span className="text-neon">Collectors</span>
