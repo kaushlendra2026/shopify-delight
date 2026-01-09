@@ -1,36 +1,33 @@
-import { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X } from 'lucide-react';
-import { useCartStore } from '@/stores/cartStore';
-import CartDrawer from './CartDrawer';
-import logo from '@/assets/logo.png';
+import { useState, useEffect } from "react";
+import { ShoppingCart, Menu, X } from "lucide-react";
+import { useCartStore } from "@/stores/cartStore";
+import CartDrawer from "./CartDrawer";
+import logo from "@/assets/logo.png";
 
 const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'Shop', href: '#shop' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: "Home", href: "#home" },
+  { label: "Shop", href: "#shop" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const totalItems = useCartStore(state => state.getTotalItems());
+
+  const totalItems = useCartStore((state) => state.getTotalItems());
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
     const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (element) element.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -38,15 +35,23 @@ const Navbar = () => {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-background/95 backdrop-blur-md border-b border-border/50'
-            : 'bg-transparent'
+            ? "bg-background/95 backdrop-blur-md border-b border-border/50"
+            : "bg-transparent"
         }`}
       >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <a href="#home" className="flex items-center gap-2">
-              <img src={logo} alt="PickaxeLab" className="h-10 md:h-12 w-auto" />
+            
+            {/* Brand */}
+            <a href="#home" className="flex items-center gap-3">
+              <img
+                src={logo}
+                alt="Pickaxe Lab"
+                className="h-9 md:h-11 w-auto"
+              />
+              <span className="text-lg md:text-xl font-bold tracking-wide">
+                PICKAXE<span className="text-primary">.LAB</span>
+              </span>
             </a>
 
             {/* Desktop Navigation */}
@@ -55,15 +60,16 @@ const Navbar = () => {
                 <button
                   key={link.label}
                   onClick={() => handleNavClick(link.href)}
-                  className="text-muted-foreground hover:text-foreground transition-colors duration-200 text-sm font-medium"
+                  className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
                 >
                   {link.label}
                 </button>
               ))}
             </div>
 
-            {/* Right Side */}
+            {/* Actions */}
             <div className="flex items-center gap-4">
+              {/* Cart */}
               <button
                 onClick={() => setIsCartOpen(true)}
                 className="relative p-2 rounded-lg border border-border/50 hover:border-primary/50 transition-colors"
@@ -76,7 +82,7 @@ const Navbar = () => {
                 )}
               </button>
 
-              {/* Mobile Menu Button */}
+              {/* Mobile Menu */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="md:hidden p-2"
@@ -98,7 +104,7 @@ const Navbar = () => {
                   <button
                     key={link.label}
                     onClick={() => handleNavClick(link.href)}
-                    className="text-left px-4 py-3 text-foreground hover:bg-secondary/50 rounded-lg transition-colors"
+                    className="text-left px-4 py-3 rounded-lg hover:bg-secondary/50 transition-colors"
                   >
                     {link.label}
                   </button>
@@ -109,6 +115,7 @@ const Navbar = () => {
         </div>
       </nav>
 
+      {/* Cart Drawer */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
