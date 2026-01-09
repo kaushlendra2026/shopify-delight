@@ -1,4 +1,5 @@
-import { Twitter, Instagram, Github, Mail, Sparkles } from 'lucide-react';
+import { Twitter, Instagram, Github, Mail } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 const socialLinks = [
   { icon: Twitter, href: '#', label: 'Twitter' },
@@ -34,11 +35,8 @@ const Footer = () => {
       <div className="relative container mx-auto px-4 py-16">
         <div className="text-center">
           {/* Logo */}
-          <a href="#home" className="inline-flex items-center gap-2 mb-4">
-            <Sparkles className="w-6 h-6 text-primary" />
-            <span className="font-display font-bold text-2xl text-neon">
-              PickaxeLab
-            </span>
+          <a href="#home" className="inline-block mb-4">
+            <img src={logo} alt="PickaxeLab" className="h-14 w-auto mx-auto" />
           </a>
 
           <p className="text-muted-foreground max-w-md mx-auto mb-8">

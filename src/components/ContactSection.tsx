@@ -23,7 +23,7 @@ const ContactSection = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
-         
+          <div className="text-center mb-12 md:mb-16">
             <h2 className="font-display font-black text-3xl md:text-5xl mb-4">
               <span className="text-foreground">Get in</span>{' '}
               <span className="text-neon">Touch</span>
