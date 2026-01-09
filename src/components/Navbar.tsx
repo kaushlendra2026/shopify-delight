@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X, Sparkles } from 'lucide-react';
+import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import CartDrawer from './CartDrawer';
+import logo from '@/assets/logo.png';
 
 const navLinks = [
   { label: 'Home', href: '#home' },
@@ -45,10 +46,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <a href="#home" className="flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-primary" />
-              <span className="font-display font-bold text-lg md:text-xl text-neon">
-                PICKAXE.LAB
-              </span>
+              <img src={logo} alt="PickaxeLab" className="h-10 md:h-12 w-auto" />
             </a>
 
             {/* Desktop Navigation */}
