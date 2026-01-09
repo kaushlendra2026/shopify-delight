@@ -23,11 +23,7 @@ const ContactSection = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-12">
-            <span className="section-badge mb-4 inline-block">
-              <Mail className="w-4 h-4" />
-              Contact
-            </span>
+         
             <h2 className="font-display font-black text-3xl md:text-5xl mb-4">
               <span className="text-foreground">Get in</span>{' '}
               <span className="text-neon">Touch</span>
@@ -46,7 +42,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Email Us</h3>
-                  <p className="text-muted-foreground text-sm">hello@pickaxe.lab</p>
+                  <p className="text-muted-foreground text-sm">kaushlendra.pandey@pickaxelab.com</p>
                 </div>
               </div>
 
@@ -56,7 +52,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Call Us</h3>
-                  <p className="text-muted-foreground text-sm">+91 98765 43210</p>
+                  <p className="text-muted-foreground text-sm">+91 73767 13453</p>
                 </div>
               </div>
 
