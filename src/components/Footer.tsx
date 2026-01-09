@@ -3,9 +3,9 @@ import logo from '@/assets/logo.png';
 
 const socialLinks = [
   { icon: Twitter, href: '#', label: 'Twitter' },
-  { icon: Instagram, href: '#', label: 'Instagram' },
+  { icon: Instagram, href: 'https://www.instagram.com/pickaxe.labs?igsh=bjZwcGx2bWtjYjFo', label: 'Instagram' },
   { icon: Github, href: '#', label: 'Github' },
-  { icon: Mail, href: '#', label: 'Email' },
+  { icon: Mail, href: 'mailto:kaushlendra.pandey@pickaxelab.com', label: 'Email' },
 ];
 
 const footerLinks = [
