@@ -51,7 +51,7 @@ const ContactSection = () => {
                   <Phone className="w-5 h-5 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Call Us</h3>
+                  <h3 className="font-semibold mb-1">Whatsapp Us</h3>
                   <p className="text-muted-foreground text-sm">+91 73767 13453</p>
                 </div>
               </div>
