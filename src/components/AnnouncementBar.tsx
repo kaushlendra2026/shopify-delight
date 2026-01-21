@@ -1,7 +1,6 @@
 const announcements = [
   "🚀 FREE SHIPPING on orders over ₹999",
   "⚡ Limited Time: 20% OFF on all products",
-  "🎁 Use code PICKAXE10 for extra 10% OFF",
   "🔥 New Arrivals just dropped - Shop Now!",
 ];
 
