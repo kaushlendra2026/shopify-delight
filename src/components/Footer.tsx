@@ -1,10 +1,8 @@
-import { Twitter, Instagram, Github, Mail } from 'lucide-react';
+import { Instagram, Mail } from 'lucide-react';
 import logo from '@/assets/logo.png';
 
 const socialLinks = [
-  { icon: Twitter, href: '#', label: 'Twitter' },
   { icon: Instagram, href: 'https://www.instagram.com/pickaxe.labs?igsh=bjZwcGx2bWtjYjFo', label: 'Instagram' },
-  { icon: Github, href: '#', label: 'Github' },
   { icon: Mail, href: 'mailto:kaushlendra.pandey@pickaxelab.com', label: 'Email' },
 ];
 
@@ -12,7 +10,6 @@ const footerLinks = [
   { label: 'Shop', href: '#shop' },
   { label: 'About', href: '#about' },
   { label: 'Contact', href: '#contact' },
-  { label: 'FAQ', href: '#' },
 ];
 
 const Footer = () => {

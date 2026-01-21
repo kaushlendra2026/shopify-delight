@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ShoppingCart, Menu, X } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useCartStore } from "@/stores/cartStore";
 import CartDrawer from "./CartDrawer";
 import logo from "@/assets/logo.png";
@@ -15,6 +16,8 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const totalItems = useCartStore((state) => state.getTotalItems());
 
@@ -26,24 +29,43 @@ const Navbar = () => {
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
-    const element = document.querySelector(href);
-    if (element) element.scrollIntoView({ behavior: "smooth" });
+    
+    // If we're not on the home page, navigate there first
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Wait for navigation then scroll
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) element.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      const element = document.querySelector(href);
+      if (element) element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleLogoClick = () => {
+    if (location.pathname !== "/") {
+      navigate("/");
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
+          isScrolled || location.pathname !== "/"
             ? "bg-background/95 backdrop-blur-md border-b border-border/50"
-            : "bg-transparent"
+            : "bg-background/80 backdrop-blur-sm"
         }`}
       >
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16 md:h-20">
             
             {/* Brand */}
-            <a href="#home" className="flex items-center gap-3">
+            <button onClick={handleLogoClick} className="flex items-center gap-3 cursor-pointer">
               <img
                 src={logo}
                 alt="Pickaxe Lab"
@@ -52,7 +74,7 @@ const Navbar = () => {
               <span className="text-lg md:text-xl font-bold tracking-wide">
                 PICKAXE<span className="text-primary">.LAB</span>
               </span>
-            </a>
+            </button>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
