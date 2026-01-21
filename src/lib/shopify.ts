@@ -145,6 +145,57 @@ const GET_PRODUCT_BY_HANDLE = `
   }
 `;
 
+const SHOP_POLICIES_QUERY = `
+  query GetShopPolicies {
+    shop {
+      privacyPolicy {
+        id
+        title
+        body
+        handle
+      }
+      termsOfService {
+        id
+        title
+        body
+        handle
+      }
+      refundPolicy {
+        id
+        title
+        body
+        handle
+      }
+      shippingPolicy {
+        id
+        title
+        body
+        handle
+      }
+    }
+  }
+`;
+
+export interface ShopPolicy {
+  id: string;
+  title: string;
+  body: string;
+  handle: string;
+}
+
+export interface ShopPolicies {
+  privacyPolicy: ShopPolicy | null;
+  termsOfService: ShopPolicy | null;
+  refundPolicy: ShopPolicy | null;
+  shippingPolicy: ShopPolicy | null;
+}
+
+export async function fetchShopPolicies(): Promise<ShopPolicies | null> {
+  const data = await storefrontApiRequest(SHOP_POLICIES_QUERY);
+  if (!data) return null;
+  return data.data.shop;
+}
+
 const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
     cartCreate(input: $input) {
