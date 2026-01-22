@@ -61,7 +61,7 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`fixed top-[36px] left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed ${location.pathname === "/" ? "top-[36px]" : "top-0"} left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled || location.pathname !== "/"
             ? "bg-background/95 backdrop-blur-md border-b border-border/50"
             : "bg-background/80 backdrop-blur-sm"
