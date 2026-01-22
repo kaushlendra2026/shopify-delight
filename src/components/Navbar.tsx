@@ -30,20 +30,23 @@ const Navbar = () => {
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
     
-    const scrollToSection = () => {
+    const scrollToSection = (attempts = 0) => {
       const element = document.querySelector(href);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
+      } else if (attempts < 10) {
+        // Retry if element not found yet
+        setTimeout(() => scrollToSection(attempts + 1), 100);
       }
     };
     
     // If we're not on the home page, navigate there first
     if (location.pathname !== "/") {
-      navigate("/", { replace: false });
-      // Wait longer for navigation to complete and DOM to render
-      setTimeout(scrollToSection, 300);
+      navigate("/");
+      // Start checking for element after navigation
+      setTimeout(() => scrollToSection(0), 100);
     } else {
-      scrollToSection();
+      scrollToSection(0);
     }
   };
 
