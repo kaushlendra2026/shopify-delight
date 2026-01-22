@@ -62,7 +62,7 @@ const ContactSection = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-1">Location</h3>
-                  <p className="text-muted-foreground text-sm">Mumbai, India</p>
+                  <p className="text-muted-foreground text-sm">Delhi NCR, India</p>
                 </div>
               </div>
             </div>
