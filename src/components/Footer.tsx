@@ -3,14 +3,6 @@ import { Instagram, Mail } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchShopPolicies, ShopPolicies } from '@/lib/shopify';
 import logo from '@/assets/logo.png';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 const socialLinks = [
   { icon: Instagram, href: 'https://www.instagram.com/pickaxe.labs?igsh=bjZwcGx2bWtjYjFo', label: 'Instagram' },
@@ -64,10 +56,9 @@ const Footer = () => {
   };
 
   const policyLinks = [
-    { label: 'Privacy Policy', policy: policies?.privacyPolicy },
-    { label: 'Terms of Service', policy: policies?.termsOfService },
-    { label: 'Refund Policy', policy: policies?.refundPolicy },
-    { label: 'Shipping Policy', policy: policies?.shippingPolicy },
+    { label: 'Terms & Conditions', href: '/terms' },
+    { label: 'Return / Refund', href: '/refund' },
+    { label: 'Shipping Policy', href: '/shipping' },
   ];
 
   return (
@@ -117,32 +108,16 @@ const Footer = () => {
             ))}
           </div>
 
-          {/* Policy Links */}
+          {/* Policy Links (dedicated URLs for Razorpay) */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
             {policyLinks.map((item, index) => (
-              <Dialog key={index}>
-                <DialogTrigger asChild>
-                  <button 
-                    className="text-muted-foreground hover:text-primary transition-colors text-xs underline underline-offset-2"
-                    disabled={!item.policy}
-                  >
-                    {item.label}
-                  </button>
-                </DialogTrigger>
-                {item.policy && (
-                  <DialogContent className="max-w-2xl max-h-[80vh]">
-                    <DialogHeader>
-                      <DialogTitle>{item.policy.title}</DialogTitle>
-                    </DialogHeader>
-                    <ScrollArea className="h-[60vh] pr-4">
-                      <div 
-                        className="prose prose-invert prose-sm max-w-none"
-                        dangerouslySetInnerHTML={{ __html: item.policy.body }}
-                      />
-                    </ScrollArea>
-                  </DialogContent>
-                )}
-              </Dialog>
+              <button
+                key={index}
+                className="text-muted-foreground hover:text-primary transition-colors text-xs underline underline-offset-2 disabled:opacity-50"
+                onClick={() => navigate(item.href)}
+              >
+                {item.label}
+              </button>
             ))}
           </div>
         </div>
