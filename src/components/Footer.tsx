@@ -10,9 +10,9 @@ const socialLinks = [
 ];
 
 const footerLinks = [
-  { label: 'Shop', href: '#shop' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 const Footer = () => {
@@ -33,6 +33,11 @@ const Footer = () => {
   }, []);
 
   const handleNavClick = (href: string) => {
+    if (href.startsWith('/')) {
+      navigate(href);
+      return;
+    }
+
     if (href.startsWith('#') && href.length > 1) {
       if (location.pathname !== "/") {
         navigate("/");

@@ -32,6 +32,11 @@ const Navbar = () => {
 
     // Route navigation for multi-page URLs
     if (href.startsWith("/")) {
+      if (href === "/" && location.pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
       navigate(href);
       return;
     }
