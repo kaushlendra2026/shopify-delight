@@ -32,9 +32,17 @@ const Footer = () => {
     loadPolicies();
   }, []);
 
+  const navigateOrScrollTop = (href: string) => {
+    if (href === location.pathname) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    navigate(href);
+  };
+
   const handleNavClick = (href: string) => {
     if (href.startsWith('/')) {
-      navigate(href);
+      navigateOrScrollTop(href);
       return;
     }
 
@@ -119,7 +127,7 @@ const Footer = () => {
               <button
                 key={index}
                 className="text-muted-foreground hover:text-primary transition-colors text-xs underline underline-offset-2 disabled:opacity-50"
-                onClick={() => navigate(item.href)}
+                onClick={() => navigateOrScrollTop(item.href)}
               >
                 {item.label}
               </button>
