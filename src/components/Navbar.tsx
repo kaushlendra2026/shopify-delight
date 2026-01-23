@@ -6,10 +6,10 @@ import CartDrawer from "./CartDrawer";
 import logo from "@/assets/logo.png";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Shop", href: "#shop" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "Shop", href: "/shop" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const Navbar = () => {
@@ -29,6 +29,12 @@ const Navbar = () => {
 
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
+
+    // Route navigation for multi-page URLs
+    if (href.startsWith("/")) {
+      navigate(href);
+      return;
+    }
     
     const scrollToSection = (attempts = 0) => {
       const element = document.querySelector(href);
