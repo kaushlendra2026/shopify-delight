@@ -1,10 +1,10 @@
 import PageLayout from "@/components/PageLayout";
-import ProductsSection from "@/components/ProductsSection";
+import ShopCatalogPage from "@/components/ShopCatalogPage";
 
 const Shop = () => {
   return (
     <PageLayout>
-      <ProductsSection />
+      <ShopCatalogPage />
     </PageLayout>
   );
 };
