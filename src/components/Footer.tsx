@@ -32,19 +32,18 @@ const Footer = () => {
     loadPolicies();
   }, []);
 
-  const navigateOrScrollTop = (href: string) => {
-    if (href === location.pathname) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
+  const openRouteInNewTab = (href: string) => {
+    try {
+      const url = new URL(href, window.location.origin).toString();
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch {
+      window.open(href, "_blank", "noopener,noreferrer");
     }
-    navigate(href);
-    // Ensure we land at the top even if the browser preserves scroll in SPA navigation.
-    setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 0);
   };
 
   const handleNavClick = (href: string) => {
     if (href.startsWith('/')) {
-      navigateOrScrollTop(href);
+      openRouteInNewTab(href);
       return;
     }
 
@@ -63,11 +62,7 @@ const Footer = () => {
   };
 
   const handleLogoClick = () => {
-    if (location.pathname !== "/") {
-      navigate("/");
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    openRouteInNewTab("/");
   };
 
   const policyLinks = [
@@ -129,7 +124,7 @@ const Footer = () => {
               <button
                 key={index}
                 className="text-muted-foreground hover:text-primary transition-colors text-xs underline underline-offset-2 disabled:opacity-50"
-                onClick={() => navigateOrScrollTop(item.href)}
+                onClick={() => openRouteInNewTab(item.href)}
               >
                 {item.label}
               </button>

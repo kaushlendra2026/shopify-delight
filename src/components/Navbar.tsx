@@ -27,18 +27,21 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const openRouteInNewTab = (href: string) => {
+    try {
+      const url = new URL(href, window.location.origin).toString();
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch {
+      window.open(href, "_blank", "noopener,noreferrer");
+    }
+  };
+
   const handleNavClick = (href: string) => {
     setIsMobileMenuOpen(false);
 
     // Route navigation for multi-page URLs
     if (href.startsWith("/")) {
-      // If user clicks the current route, just scroll to top
-      if (href === location.pathname) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        return;
-      }
-
-      navigate(href);
+      openRouteInNewTab(href);
       return;
     }
     
@@ -63,11 +66,7 @@ const Navbar = () => {
   };
 
   const handleLogoClick = () => {
-    if (location.pathname !== "/") {
-      navigate("/");
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+    openRouteInNewTab("/");
   };
 
   return (
@@ -80,10 +79,10 @@ const Navbar = () => {
         }`}
       >
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="grid grid-cols-2 md:grid-cols-3 items-center h-16 md:h-20">
             
             {/* Brand */}
-            <button onClick={handleLogoClick} className="flex items-center gap-3 cursor-pointer">
+            <button onClick={handleLogoClick} className="flex items-center gap-3 cursor-pointer justify-self-start">
               <img
                 src={logo}
                 alt="Pickaxe Lab"
@@ -95,7 +94,7 @@ const Navbar = () => {
             </button>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex flex-1 items-center justify-center gap-8">
+            <div className="hidden md:flex items-center justify-center gap-8 justify-self-center">
               {navLinks.map((link) => (
                 <button
                   key={link.label}
@@ -108,7 +107,7 @@ const Navbar = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 justify-self-end">
               {/* Cart */}
               <button
                 onClick={() => setIsCartOpen(true)}
