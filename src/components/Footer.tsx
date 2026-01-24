@@ -38,6 +38,8 @@ const Footer = () => {
       return;
     }
     navigate(href);
+    // Ensure we land at the top even if the browser preserves scroll in SPA navigation.
+    setTimeout(() => window.scrollTo({ top: 0, behavior: "auto" }), 0);
   };
 
   const handleNavClick = (href: string) => {

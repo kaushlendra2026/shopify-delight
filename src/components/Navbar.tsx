@@ -32,7 +32,8 @@ const Navbar = () => {
 
     // Route navigation for multi-page URLs
     if (href.startsWith("/")) {
-      if (href === "/" && location.pathname === "/") {
+      // If user clicks the current route, just scroll to top
+      if (href === location.pathname) {
         window.scrollTo({ top: 0, behavior: "smooth" });
         return;
       }
@@ -94,7 +95,7 @@ const Navbar = () => {
             </button>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex flex-1 items-center justify-center gap-8">
               {navLinks.map((link) => (
                 <button
                   key={link.label}
