@@ -1,5 +1,7 @@
 import { X, Minus, Plus, Trash2, ExternalLink, Loader2, ShoppingCart } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
+import { createStorefrontCheckout } from '@/lib/shopify';
+import { toast } from 'sonner';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -12,7 +14,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
     isLoading, 
     updateQuantity, 
     removeItem, 
-    createCheckout,
+    setLoading,
     getTotalPrice
   } = useCartStore();
 
@@ -20,15 +22,44 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const totalPrice = getTotalPrice();
 
   const handleCheckout = async () => {
+    if (items.length === 0) return;
+
+    // iOS-compatible: Open window synchronously BEFORE async operation
+    const checkoutWindow = window.open('about:blank', '_blank');
+    
+    if (!checkoutWindow) {
+      toast.error('Popup blocked', {
+        description: 'Please allow popups for this site to checkout'
+      });
+      return;
+    }
+
+    // Show loading state in the new window
+    checkoutWindow.document.write(`
+      <html>
+        <head><title>Loading checkout...</title></head>
+        <body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0a0a0a;color:#fff;font-family:system-ui;">
+          <div style="text-align:center;">
+            <div style="font-size:24px;margin-bottom:16px;">Loading checkout...</div>
+            <div style="color:#888;">Please wait while we prepare your order</div>
+          </div>
+        </body>
+      </html>
+    `);
+
+    setLoading(true);
     try {
-      await createCheckout();
-      const checkoutUrl = useCartStore.getState().checkoutUrl;
-      if (checkoutUrl) {
-        window.open(checkoutUrl, '_blank');
-        onClose();
-      }
+      const checkoutUrl = await createStorefrontCheckout(items);
+      checkoutWindow.location.href = checkoutUrl;
+      onClose();
     } catch (error) {
       console.error('Checkout failed:', error);
+      checkoutWindow.close();
+      toast.error('Checkout failed', {
+        description: 'Please try again'
+      });
+    } finally {
+      setLoading(false);
     }
   };
 

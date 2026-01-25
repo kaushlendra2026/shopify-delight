@@ -335,3 +335,40 @@ export async function createStorefrontCheckout(items: CartItem[]): Promise<strin
     throw error;
   }
 }
+
+// iOS-compatible checkout - opens window synchronously to avoid popup blocker
+export async function buyNowCheckout(item: CartItem): Promise<void> {
+  // Open window synchronously BEFORE async operation (iOS popup blocker fix)
+  const checkoutWindow = window.open('about:blank', '_blank');
+  
+  if (!checkoutWindow) {
+    toast.error('Popup blocked', {
+      description: 'Please allow popups for this site to checkout'
+    });
+    return;
+  }
+
+  // Show loading state in the new window
+  checkoutWindow.document.write(`
+    <html>
+      <head><title>Loading checkout...</title></head>
+      <body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0a0a0a;color:#fff;font-family:system-ui;">
+        <div style="text-align:center;">
+          <div style="font-size:24px;margin-bottom:16px;">Loading checkout...</div>
+          <div style="color:#888;">Please wait while we prepare your order</div>
+        </div>
+      </body>
+    </html>
+  `);
+
+  try {
+    const checkoutUrl = await createStorefrontCheckout([item]);
+    checkoutWindow.location.href = checkoutUrl;
+  } catch (error) {
+    console.error('Checkout failed:', error);
+    checkoutWindow.close();
+    toast.error('Checkout failed', {
+      description: 'Please try again or add to cart first'
+    });
+  }
+}

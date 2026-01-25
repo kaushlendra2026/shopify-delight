@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { fetchProductByHandle, CartItem, ShopifyProduct } from '@/lib/shopify';
+import { fetchProductByHandle, CartItem, ShopifyProduct, buyNowCheckout } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
-import { ArrowLeft, ShoppingCart, Loader2, Minus, Plus } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Loader2, Minus, Plus, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -58,14 +58,12 @@ const ProductDetail = () => {
   const selectedVariant = product.variants.edges[selectedVariantIndex]?.node;
   const images = product.images.edges;
 
-  const handleAddToCart = () => {
-    if (!selectedVariant) return;
-
+  const createCartItem = (): CartItem => {
     const shopifyProduct: ShopifyProduct = {
       node: product
     };
 
-    const cartItem: CartItem = {
+    return {
       product: shopifyProduct,
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
@@ -73,12 +71,20 @@ const ProductDetail = () => {
       quantity,
       selectedOptions: selectedVariant.selectedOptions || []
     };
+  };
 
-    addItem(cartItem);
+  const handleAddToCart = () => {
+    if (!selectedVariant) return;
+    addItem(createCartItem());
     toast.success('Added to cart!', {
       description: `${product.title} x${quantity}`,
       position: 'top-center'
     });
+  };
+
+  const handleBuyNow = () => {
+    if (!selectedVariant) return;
+    buyNowCheckout(createCartItem());
   };
 
   return (
@@ -192,6 +198,16 @@ const ProductDetail = () => {
               </div>
             </div>
 
+            {/* Buy Now */}
+            <button
+              onClick={handleBuyNow}
+              disabled={!selectedVariant?.availableForSale}
+              className="w-full bg-primary text-primary-foreground font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mb-3"
+            >
+              <Zap className="w-5 h-5" />
+              {selectedVariant?.availableForSale ? 'Buy Now' : 'Sold Out'}
+            </button>
+
             {/* Add to Cart */}
             <button
               onClick={handleAddToCart}
@@ -199,7 +215,7 @@ const ProductDetail = () => {
               className="w-full btn-neon flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ShoppingCart className="w-5 h-5" />
-              {selectedVariant?.availableForSale ? 'Add to Cart' : 'Sold Out'}
+              Add to Cart
             </button>
 
             {/* Stock Status */}

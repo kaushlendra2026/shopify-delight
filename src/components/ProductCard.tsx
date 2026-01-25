@@ -1,5 +1,5 @@
-import { ShoppingCart, Eye } from 'lucide-react';
-import { ShopifyProduct, CartItem } from '@/lib/shopify';
+import { ShoppingCart, Eye, Zap } from 'lucide-react';
+import { ShopifyProduct, CartItem, buyNowCheckout } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
@@ -16,26 +16,31 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const firstImage = node.images.edges[0]?.node;
   const price = node.priceRange.minVariantPrice;
 
+  const createCartItem = (): CartItem => ({
+    product,
+    variantId: firstVariant.id,
+    variantTitle: firstVariant.title,
+    price: firstVariant.price,
+    quantity: 1,
+    selectedOptions: firstVariant.selectedOptions || []
+  });
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
     if (!firstVariant) return;
-
-    const cartItem: CartItem = {
-      product,
-      variantId: firstVariant.id,
-      variantTitle: firstVariant.title,
-      price: firstVariant.price,
-      quantity: 1,
-      selectedOptions: firstVariant.selectedOptions || []
-    };
-
-    addItem(cartItem);
+    addItem(createCartItem());
     toast.success('Added to cart!', {
       description: node.title,
       position: 'top-center'
     });
+  };
+
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!firstVariant) return;
+    buyNowCheckout(createCartItem());
   };
 
   return (
@@ -60,12 +65,20 @@ const ProductCard = ({ product }: ProductCardProps) => {
         {/* Overlay on Hover */}
         <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
           <button
-            onClick={handleAddToCart}
+            onClick={handleBuyNow}
             className="p-3 bg-primary text-primary-foreground rounded-full hover:scale-110 transition-transform"
+            title="Buy Now"
+          >
+            <Zap className="w-5 h-5" />
+          </button>
+          <button
+            onClick={handleAddToCart}
+            className="p-3 bg-secondary text-foreground rounded-full hover:scale-110 transition-transform"
+            title="Add to Cart"
           >
             <ShoppingCart className="w-5 h-5" />
           </button>
-          <div className="p-3 bg-secondary text-foreground rounded-full">
+          <div className="p-3 bg-muted text-foreground rounded-full">
             <Eye className="w-5 h-5" />
           </div>
         </div>
