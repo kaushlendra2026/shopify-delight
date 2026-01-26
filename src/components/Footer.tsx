@@ -69,6 +69,7 @@ const Footer = () => {
     { label: 'Terms & Conditions', href: '/terms' },
     { label: 'Return / Refund', href: '/refund' },
     { label: 'Shipping Policy', href: '/shipping' },
+    { label: 'Privacy Policy', href: '/privacy' },
   ];
 
   return (

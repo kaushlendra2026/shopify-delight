@@ -3,7 +3,7 @@ import PageLayout from "@/components/PageLayout";
 import { fetchShopPolicies, type ShopPolicies, type ShopPolicy } from "@/lib/shopify";
 import { Loader2 } from "lucide-react";
 
-type PolicyKey = "termsOfService" | "refundPolicy" | "shippingPolicy";
+type PolicyKey = "termsOfService" | "refundPolicy" | "shippingPolicy" | "privacyPolicy";
 
 type PolicyPageProps = {
   policyKey: PolicyKey;
