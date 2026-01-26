@@ -11,6 +11,7 @@ import Contact from "./pages/Contact";
 import Terms from "./pages/Terms";
 import RefundPolicy from "./pages/RefundPolicy";
 import ShippingPolicy from "./pages/ShippingPolicy";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/refund" element={<RefundPolicy />} />
           <Route path="/shipping" element={<ShippingPolicy />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/product/:handle" element={<ProductDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
