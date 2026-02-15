@@ -352,19 +352,25 @@ function getCheckoutLoaderHTML(): string {
       overflow: hidden;
     }
     .container { text-align: center; max-width: 420px; padding: 24px; }
-    .spinner-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto 32px; }
-    .spinner {
-      width: 80px; height: 80px; border-radius: 50%;
-      border: 3px solid rgba(74, 222, 128, 0.15);
-      border-top-color: #4ade80;
-      animation: spin 0.9s linear infinite;
+    .luma-wrap { position: relative; width: 70px; height: 70px; margin: 0 auto 32px; }
+    .luma-box {
+      position: absolute; border-radius: 4px;
+      background: #4ade80;
+      animation: loaderAnim 2.5s infinite;
+      inset: 0 35px 35px 0;
     }
-    .icon {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 28px;
+    .luma-box.delayed { animation-delay: -1.25s; }
+    @keyframes loaderAnim {
+      0% { inset: 0 35px 35px 0; }
+      12.5% { inset: 0 35px 0 0; }
+      25% { inset: 35px 35px 0 0; }
+      37.5% { inset: 35px 0 0 0; }
+      50% { inset: 35px 0 0 35px; }
+      62.5% { inset: 0 0 0 35px; }
+      75% { inset: 0 0 35px 35px; }
+      87.5% { inset: 0 0 35px 0; }
+      100% { inset: 0 35px 35px 0; }
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
     h1 { font-size: 22px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
     p { color: #888; font-size: 14px; line-height: 1.6; }
     .progress-bar {
@@ -381,9 +387,9 @@ function getCheckoutLoaderHTML(): string {
 </head>
 <body>
   <div class="container">
-    <div class="spinner-wrap">
-      <div class="spinner"></div>
-      <div class="icon">🛒</div>
+    <div class="luma-wrap">
+      <div class="luma-box"></div>
+      <div class="luma-box delayed"></div>
     </div>
     <h1>Preparing your checkout</h1>
     <p>We're securely connecting you to our payment partner. This will only take a moment.</p>
