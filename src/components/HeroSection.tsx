@@ -22,14 +22,17 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
       {/* Video Background */}
       <video
         autoPlay
         loop
         muted
         playsInline
+        webkit-playsinline=""
+        preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
+        poster=""
       >
         <source src="/hero-bg.mp4" type="video/mp4" />
       </video>

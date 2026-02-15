@@ -77,6 +77,7 @@ const Navbar = () => {
             ? "bg-background/95 backdrop-blur-md border-b border-border/50"
             : "bg-background/80 backdrop-blur-sm"
         }`}
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
       >
         <div className="container mx-auto px-4 md:px-6">
           <div className="grid grid-cols-2 md:grid-cols-3 items-center h-16 md:h-20">

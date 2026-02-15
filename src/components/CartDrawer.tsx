@@ -61,10 +61,11 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       <div
         className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50"
         onClick={onClose}
+        onTouchEnd={(e) => { e.preventDefault(); onClose(); }}
       />
 
       {/* Drawer */}
-      <div className="fixed top-0 right-0 h-full w-full sm:max-w-md bg-card border-l border-border z-50 flex flex-col">
+      <div className="fixed top-0 right-0 h-[100dvh] w-full sm:max-w-md bg-card border-l border-border z-50 flex flex-col animate-slide-in-right">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border">
           <h2 className="font-display font-bold text-lg">Shopping Cart</h2>
@@ -77,7 +78,7 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-4 overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <ShoppingCart className="w-16 h-16 text-muted-foreground mb-4" />
