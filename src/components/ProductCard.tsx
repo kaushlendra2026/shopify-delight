@@ -62,8 +62,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         )}
 
-        {/* Overlay on Hover */}
-        <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+        {/* Overlay - visible on hover (desktop) and always subtly accessible on touch */}
+        <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 active:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
           <button
             onClick={handleBuyNow}
             className="p-3 bg-primary text-primary-foreground rounded-full hover:scale-110 transition-transform"

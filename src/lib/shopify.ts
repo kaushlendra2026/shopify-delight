@@ -347,9 +347,12 @@ function getCheckoutLoaderHTML(): string {
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       display: flex; align-items: center; justify-content: center;
-      height: 100vh; background: #0f1117; color: #f2f2f2;
+      height: 100vh; height: 100dvh;
+      background: #0f1117; color: #f2f2f2;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     .container { text-align: center; max-width: 420px; padding: 24px; }
     .luma-wrap { position: relative; width: 70px; height: 70px; margin: 0 auto 32px; }
