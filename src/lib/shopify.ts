@@ -336,9 +336,66 @@ export async function createStorefrontCheckout(items: CartItem[]): Promise<strin
   }
 }
 
+function getCheckoutLoaderHTML(): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preparing your checkout...</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      display: flex; align-items: center; justify-content: center;
+      height: 100vh; background: #0f1117; color: #f2f2f2;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+    }
+    .container { text-align: center; max-width: 420px; padding: 24px; }
+    .spinner-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto 32px; }
+    .spinner {
+      width: 80px; height: 80px; border-radius: 50%;
+      border: 3px solid rgba(74, 222, 128, 0.15);
+      border-top-color: #4ade80;
+      animation: spin 0.9s linear infinite;
+    }
+    .icon {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 28px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+    p { color: #888; font-size: 14px; line-height: 1.6; }
+    .progress-bar {
+      width: 100%; height: 4px; background: rgba(74, 222, 128, 0.12);
+      border-radius: 4px; margin-top: 32px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0%; background: linear-gradient(90deg, #4ade80, #22c55e);
+      border-radius: 4px; animation: fill 4s ease-in-out forwards;
+    }
+    @keyframes fill { 0% { width: 0%; } 60% { width: 70%; } 100% { width: 95%; } }
+    .secure { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 20px; color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="spinner-wrap">
+      <div class="spinner"></div>
+      <div class="icon">🛒</div>
+    </div>
+    <h1>Preparing your checkout</h1>
+    <p>We're securely connecting you to our payment partner. This will only take a moment.</p>
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+    <div class="secure">🔒 Secured by Shopify</div>
+  </div>
+</body>
+</html>`;
+}
+
 // iOS-compatible checkout - opens window synchronously to avoid popup blocker
 export async function buyNowCheckout(item: CartItem): Promise<void> {
-  // Open window synchronously BEFORE async operation (iOS popup blocker fix)
   const checkoutWindow = window.open('about:blank', '_blank');
   
   if (!checkoutWindow) {
@@ -348,18 +405,8 @@ export async function buyNowCheckout(item: CartItem): Promise<void> {
     return;
   }
 
-  // Show loading state in the new window
-  checkoutWindow.document.write(`
-    <html>
-      <head><title>Loading checkout...</title></head>
-      <body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0a0a0a;color:#fff;font-family:system-ui;">
-        <div style="text-align:center;">
-          <div style="font-size:24px;margin-bottom:16px;">Loading checkout...</div>
-          <div style="color:#888;">Please wait while we prepare your order</div>
-        </div>
-      </body>
-    </html>
-  `);
+  checkoutWindow.document.write(getCheckoutLoaderHTML());
+  checkoutWindow.document.close();
 
   try {
     const checkoutUrl = await createStorefrontCheckout([item]);
@@ -372,3 +419,5 @@ export async function buyNowCheckout(item: CartItem): Promise<void> {
     });
   }
 }
+
+export { getCheckoutLoaderHTML };

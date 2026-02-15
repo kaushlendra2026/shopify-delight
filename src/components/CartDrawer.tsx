@@ -1,6 +1,6 @@
 import { X, Minus, Plus, Trash2, ExternalLink, Loader2, ShoppingCart } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
-import { createStorefrontCheckout } from '@/lib/shopify';
+import { createStorefrontCheckout, getCheckoutLoaderHTML } from '@/lib/shopify';
 import { toast } from 'sonner';
 
 interface CartDrawerProps {
@@ -34,18 +34,8 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
       return;
     }
 
-    // Show loading state in the new window
-    checkoutWindow.document.write(`
-      <html>
-        <head><title>Loading checkout...</title></head>
-        <body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#0a0a0a;color:#fff;font-family:system-ui;">
-          <div style="text-align:center;">
-            <div style="font-size:24px;margin-bottom:16px;">Loading checkout...</div>
-            <div style="color:#888;">Please wait while we prepare your order</div>
-          </div>
-        </body>
-      </html>
-    `);
+    checkoutWindow.document.write(getCheckoutLoaderHTML());
+    checkoutWindow.document.close();
 
     setLoading(true);
     try {
