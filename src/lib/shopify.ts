@@ -35,6 +35,10 @@ export interface ShopifyProduct {
             currencyCode: string;
           };
           availableForSale: boolean;
+          compareAtPrice: {
+            amount: string;
+            currencyCode: string;
+          } | null;
           selectedOptions: Array<{
             name: string;
             value: string;
@@ -78,6 +82,10 @@ const STOREFRONT_QUERY = `
                 id
                 title
                 price {
+                  amount
+                  currencyCode
+                }
+                compareAtPrice {
                   amount
                   currencyCode
                 }
@@ -126,6 +134,10 @@ const GET_PRODUCT_BY_HANDLE = `
             id
             title
             price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
               amount
               currencyCode
             }
