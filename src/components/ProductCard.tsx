@@ -15,6 +15,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const firstVariant = node.variants.edges[0]?.node;
   const firstImage = node.images.edges[0]?.node;
   const price = node.priceRange.minVariantPrice;
+  const compareAtPrice = firstVariant?.compareAtPrice;
 
   const createCartItem = (): CartItem => ({
     product,
@@ -93,9 +94,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {node.description || 'Premium 3D printed collectible'}
         </p>
         <div className="flex items-center justify-between">
-          <span className="font-bold text-xl text-primary">
-            {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
-          </span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="font-bold text-xl text-primary">
+              {price.currencyCode} {parseFloat(price.amount).toFixed(2)}
+            </span>
+            {compareAtPrice && parseFloat(compareAtPrice.amount) > parseFloat(price.amount) && (
+              <span className="text-sm text-muted-foreground line-through">
+                {compareAtPrice.currencyCode} {parseFloat(compareAtPrice.amount).toFixed(2)}
+              </span>
+            )}
           {firstVariant?.availableForSale ? (
             <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
               In Stock
@@ -105,8 +112,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               Sold Out
             </span>
           )}
-        </div>
-      </div>
+          </div>
     </Link>
   );
 };

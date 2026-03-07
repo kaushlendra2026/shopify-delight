@@ -142,9 +142,17 @@ const ProductDetail = () => {
               {product.title}
             </h1>
             
-            <div className="text-3xl font-bold text-primary mb-6">
-              {selectedVariant?.price.currencyCode}{' '}
-              {parseFloat(selectedVariant?.price.amount || '0').toFixed(2)}
+            <div className="flex items-center gap-3 mb-6">
+              <span className="text-3xl font-bold text-primary">
+                {selectedVariant?.price.currencyCode}{' '}
+                {parseFloat(selectedVariant?.price.amount || '0').toFixed(2)}
+              </span>
+              {selectedVariant?.compareAtPrice && parseFloat(selectedVariant.compareAtPrice.amount) > parseFloat(selectedVariant.price.amount) && (
+                <span className="text-xl text-muted-foreground line-through">
+                  {selectedVariant.compareAtPrice.currencyCode}{' '}
+                  {parseFloat(selectedVariant.compareAtPrice.amount).toFixed(2)}
+                </span>
+              )}
             </div>
 
             <p className="text-muted-foreground leading-relaxed mb-8">
