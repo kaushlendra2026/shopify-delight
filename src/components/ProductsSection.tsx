@@ -12,7 +12,11 @@ const ProductsSection = () => {
     const loadProducts = async () => {
       try {
         const data = await fetchProducts(20);
-        setProducts(data);
+        // Show only products tagged "featured" in Shopify
+        const featured = data.filter((p) =>
+          p.node.tags?.some((t) => t.toLowerCase() === 'featured')
+        );
+        setProducts(featured.length > 0 ? featured : data.slice(0, 8));
       } catch (err) {
         console.error('Failed to fetch products:', err);
         setError('Failed to load products');
