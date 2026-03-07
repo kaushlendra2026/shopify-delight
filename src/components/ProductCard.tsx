@@ -103,6 +103,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 {compareAtPrice.currencyCode} {parseFloat(compareAtPrice.amount).toFixed(2)}
               </span>
             )}
+          </div>
           {firstVariant?.availableForSale ? (
             <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
               In Stock
@@ -112,9 +113,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
               Sold Out
             </span>
           )}
-          </div>
+        </div>
+      </div>
     </Link>
   );
 };
+
+export default ProductCard;
 
 export default ProductCard;
