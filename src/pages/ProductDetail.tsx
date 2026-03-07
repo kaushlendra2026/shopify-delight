@@ -247,6 +247,7 @@ const ProductDetail = () => {
           productType={product.productType}
           tags={product.tags}
         />
+      </main>
 
       <Footer />
     </div>
