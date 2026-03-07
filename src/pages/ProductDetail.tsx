@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchProductByHandle, CartItem, ShopifyProduct, buyNowCheckout } from '@/lib/shopify';
+import RelatedProducts from '@/components/RelatedProducts';
 import { useCartStore } from '@/stores/cartStore';
 import { ArrowLeft, ShoppingCart, Loader2, Minus, Plus, Zap } from 'lucide-react';
 import { toast } from 'sonner';
@@ -239,7 +240,13 @@ const ProductDetail = () => {
 
         {/* FAQ & Policies Section */}
         <ProductFAQ />
-      </main>
+
+        {/* Related Products */}
+        <RelatedProducts
+          currentHandle={handle || ''}
+          productType={product.productType}
+          tags={product.tags}
+        />
 
       <Footer />
     </div>
