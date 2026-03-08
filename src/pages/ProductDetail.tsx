@@ -241,6 +241,11 @@ const ProductDetail = () => {
                 <span className="text-destructive text-sm">Out of Stock</span>
               )}
             </div>
+
+            {/* Delivery Counter */}
+            <div className="mt-6">
+              <DeliveryCounter count={1250} label="Products Delivered" />
+            </div>
           </div>
         </div>
 
