@@ -143,16 +143,21 @@ const ProductDetail = () => {
               {product.title}
             </h1>
             
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-6 flex-wrap">
               <span className="text-3xl font-bold text-primary">
                 {selectedVariant?.price.currencyCode}{' '}
                 {parseFloat(selectedVariant?.price.amount || '0').toFixed(2)}
               </span>
               {selectedVariant?.compareAtPrice && parseFloat(selectedVariant.compareAtPrice.amount) > parseFloat(selectedVariant.price.amount) && (
-                <span className="text-xl text-muted-foreground line-through">
-                  {selectedVariant.compareAtPrice.currencyCode}{' '}
-                  {parseFloat(selectedVariant.compareAtPrice.amount).toFixed(2)}
-                </span>
+                <>
+                  <span className="text-xl text-muted-foreground line-through">
+                    {selectedVariant.compareAtPrice.currencyCode}{' '}
+                    {parseFloat(selectedVariant.compareAtPrice.amount).toFixed(2)}
+                  </span>
+                  <span className="bg-destructive text-destructive-foreground text-xs font-bold px-2 py-1 rounded-full">
+                    {Math.round(((parseFloat(selectedVariant.compareAtPrice.amount) - parseFloat(selectedVariant.price.amount)) / parseFloat(selectedVariant.compareAtPrice.amount)) * 100)}% OFF
+                  </span>
+                </>
               )}
             </div>
 
@@ -238,15 +243,15 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* FAQ & Policies Section */}
-        <ProductFAQ />
-
-        {/* Related Products */}
+        {/* Related Products - above FAQ */}
         <RelatedProducts
           currentHandle={handle || ''}
           productType={product.productType}
           tags={product.tags}
         />
+
+        {/* FAQ & Policies Section */}
+        <ProductFAQ />
       </main>
 
       <Footer />
