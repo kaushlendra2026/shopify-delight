@@ -1,4 +1,4 @@
-import { ShoppingCart, Eye, Zap } from 'lucide-react';
+import { ShoppingCart, Eye, Zap, Tag } from 'lucide-react';
 import { ShopifyProduct, CartItem, buyNowCheckout } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
@@ -51,6 +51,13 @@ const ProductCard = ({ product }: ProductCardProps) => {
     >
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-muted">
+        {/* Sale Badge */}
+        {compareAtPrice && parseFloat(compareAtPrice.amount) > parseFloat(price.amount) && (
+          <div className="absolute top-2 left-2 z-10 bg-destructive text-destructive-foreground text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+            <Tag className="w-3 h-3" />
+            {Math.round(((parseFloat(compareAtPrice.amount) - parseFloat(price.amount)) / parseFloat(compareAtPrice.amount)) * 100)}% OFF
+          </div>
+        )}
         {firstImage ? (
           <img
             src={firstImage.url}
