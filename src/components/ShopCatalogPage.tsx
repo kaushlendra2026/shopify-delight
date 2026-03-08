@@ -1,81 +1,49 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchProducts, fetchCollections, fetchCollectionProducts, type ShopifyProduct, type ShopifyCollection } from "@/lib/shopify";
+import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
 import ProductCard from "@/components/ProductCard";
-import DeliveryCounter from "@/components/DeliveryCounter";
 import { Input } from "@/components/ui/input";
 import { Loader2, Package, Search, LayoutGrid } from "lucide-react";
 
 export default function ShopCatalogPage() {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
-  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [selectedCollection, setSelectedCollection] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
-    const load = async () => {
+    const loadProducts = async () => {
       try {
-        const [prodData, collData] = await Promise.all([
-          fetchProducts(60),
-          fetchCollections(20),
-        ]);
-        setProducts(prodData);
-        setCollections(collData);
+        const data = await fetchProducts(60);
+        setProducts(data);
       } catch (err) {
-        console.error("Failed to fetch data:", err);
+        console.error("Failed to fetch products:", err);
         setError("Failed to load products");
       } finally {
         setLoading(false);
       }
     };
-    load();
+
+    loadProducts();
   }, []);
 
-  const handleCollectionSelect = async (handle: string) => {
-    setSelectedCollection(handle);
-    if (handle === "All") return;
-    setLoading(true);
-    try {
-      const collProducts = await fetchCollectionProducts(handle, 60);
-      setProducts((prev) => {
-        // Merge fetched collection products, keeping cache
-        const existing = new Map(prev.map((p) => [p.node.id, p]));
-        collProducts.forEach((p) => existing.set(p.node.id, p));
-        return Array.from(existing.values());
-      });
-    } catch (err) {
-      console.error("Failed to fetch collection products:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // When "All" is selected, show all products; otherwise filter by collection products
-  const [collectionProductIds, setCollectionProductIds] = useState<Set<string> | null>(null);
-
-  useEffect(() => {
-    if (selectedCollection === "All") {
-      setCollectionProductIds(null);
-      return;
-    }
-    const fetchIds = async () => {
-      try {
-        const collProducts = await fetchCollectionProducts(selectedCollection, 60);
-        setCollectionProductIds(new Set(collProducts.map((p) => p.node.id)));
-      } catch {
-        setCollectionProductIds(null);
-      }
-    };
-    fetchIds();
-  }, [selectedCollection]);
+  const categories = useMemo(() => {
+    const types = new Set<string>();
+    products.forEach((p) => {
+      const type = p.node.productType?.trim();
+      if (type) types.add(type);
+    });
+    return ["All", ...Array.from(types).sort()];
+  }, [products]);
 
   const filtered = useMemo(() => {
     let result = products;
 
-    // Collection filter
-    if (selectedCollection !== "All" && collectionProductIds) {
-      result = result.filter((p) => collectionProductIds.has(p.node.id));
+    // Category filter
+    if (selectedCategory !== "All") {
+      result = result.filter(
+        (p) => p.node.productType?.trim() === selectedCategory
+      );
     }
 
     // Search filter
@@ -89,29 +57,17 @@ export default function ShopCatalogPage() {
     }
 
     return result;
-  }, [products, query, selectedCollection, collectionProductIds]);
-
-  const categoryButtons = useMemo(() => {
-    return [
-      { title: "All", handle: "All" },
-      ...collections
-        .filter((c) => c.node.productsCount.count > 0)
-        .map((c) => ({ title: c.node.title, handle: c.node.handle })),
-    ];
-  }, [collections]);
+  }, [products, query, selectedCategory]);
 
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-          <header className="max-w-3xl">
-            <h1 className="font-display font-black text-3xl md:text-5xl">Shop</h1>
-            <p className="text-muted-foreground mt-3">
-              Browse the full catalog of premium 3D printed collectibles.
-            </p>
-          </header>
-          <DeliveryCounter count={1250} />
-        </div>
+        <header className="max-w-3xl">
+          <h1 className="font-display font-black text-3xl md:text-5xl">Shop</h1>
+          <p className="text-muted-foreground mt-3">
+            Browse the full catalog of premium 3D printed collectibles.
+          </p>
+        </header>
 
         {/* Search + Filters */}
         <div className="mt-8 space-y-4">
@@ -125,24 +81,21 @@ export default function ShopCatalogPage() {
             />
           </div>
 
-          {/* Collection Filters */}
-          {categoryButtons.length > 1 && (
+          {/* Category Filters */}
+          {categories.length > 1 && (
             <div className="flex items-center gap-2 flex-wrap">
               <LayoutGrid className="w-4 h-4 text-muted-foreground mr-1" />
-              {categoryButtons.map((cat) => (
+              {categories.map((cat) => (
                 <button
-                  key={cat.handle}
-                  onClick={() => {
-                    setSelectedCollection(cat.handle);
-                    if (cat.handle !== "All") handleCollectionSelect(cat.handle);
-                  }}
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
-                    selectedCollection === cat.handle
+                    selectedCategory === cat
                       ? "bg-primary text-primary-foreground border-primary"
                       : "bg-secondary text-secondary-foreground border-border hover:border-primary/50"
                   }`}
                 >
-                  {cat.title}
+                  {cat}
                 </button>
               ))}
             </div>
