@@ -1,64 +1,78 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
+import {
+  fetchProducts,
+  fetchCollections,
+  fetchCollectionProducts,
+  type ShopifyProduct,
+  type ShopifyCollection,
+} from "@/lib/shopify";
 import ProductCard from "@/components/ProductCard";
 import DeliveryCounter from "@/components/DeliveryCounter";
 import { Input } from "@/components/ui/input";
 import { Loader2, Package, Search, LayoutGrid } from "lucide-react";
 
 export default function ShopCatalogPage() {
-  const [products, setProducts] = useState<ShopifyProduct[]>([]);
+  const [allProducts, setAllProducts] = useState<ShopifyProduct[]>([]);
+  const [displayProducts, setDisplayProducts] = useState<ShopifyProduct[]>([]);
+  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filterLoading, setFilterLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCollection, setSelectedCollection] = useState("All");
 
+  // Load all products + collections on mount
   useEffect(() => {
-    const loadProducts = async () => {
+    const load = async () => {
       try {
-        const data = await fetchProducts(60);
-        setProducts(data);
+        const [products, cols] = await Promise.all([
+          fetchProducts(60),
+          fetchCollections(20),
+        ]);
+        setAllProducts(products);
+        setDisplayProducts(products);
+        setCollections(cols);
       } catch (err) {
-        console.error("Failed to fetch products:", err);
+        console.error("Failed to fetch data:", err);
         setError("Failed to load products");
       } finally {
         setLoading(false);
       }
     };
-
-    loadProducts();
+    load();
   }, []);
 
-  const categories = useMemo(() => {
-    const types = new Set<string>();
-    products.forEach((p) => {
-      const type = p.node.productType?.trim();
-      if (type) types.add(type);
-    });
-    return ["All", ...Array.from(types).sort()];
-  }, [products]);
+  // Handle collection filter change
+  const handleCollectionChange = async (handle: string) => {
+    setSelectedCollection(handle);
+    if (handle === "All") {
+      setDisplayProducts(allProducts);
+      return;
+    }
+    setFilterLoading(true);
+    try {
+      const products = await fetchCollectionProducts(handle, 60);
+      setDisplayProducts(products);
+    } catch (err) {
+      console.error("Failed to fetch collection products:", err);
+      setDisplayProducts([]);
+    } finally {
+      setFilterLoading(false);
+    }
+  };
 
+  // Search filter on top of current display
   const filtered = useMemo(() => {
-    let result = products;
-
-    // Category filter
-    if (selectedCategory !== "All") {
-      result = result.filter(
-        (p) => p.node.productType?.trim() === selectedCategory
-      );
-    }
-
-    // Search filter
     const q = query.trim().toLowerCase();
-    if (q) {
-      result = result.filter((p) => {
-        const title = p.node.title?.toLowerCase() ?? "";
-        const desc = p.node.description?.toLowerCase() ?? "";
-        return title.includes(q) || desc.includes(q);
-      });
-    }
+    if (!q) return displayProducts;
+    return displayProducts.filter((p) => {
+      const title = p.node.title?.toLowerCase() ?? "";
+      const desc = p.node.description?.toLowerCase() ?? "";
+      return title.includes(q) || desc.includes(q);
+    });
+  }, [displayProducts, query]);
 
-    return result;
-  }, [products, query, selectedCategory]);
+  const isLoading = loading || filterLoading;
 
   return (
     <section className="py-16 md:py-24">
@@ -83,21 +97,31 @@ export default function ShopCatalogPage() {
             />
           </div>
 
-          {/* Category Filters */}
-          {categories.length > 1 && (
+          {/* Collection Filters */}
+          {collections.length > 0 && (
             <div className="flex items-center gap-2 flex-wrap">
               <LayoutGrid className="w-4 h-4 text-muted-foreground mr-1" />
-              {categories.map((cat) => (
+              <button
+                onClick={() => handleCollectionChange("All")}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
+                  selectedCollection === "All"
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-secondary text-secondary-foreground border-border hover:border-primary/50"
+                }`}
+              >
+                All
+              </button>
+              {collections.map((col) => (
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  key={col.node.id}
+                  onClick={() => handleCollectionChange(col.node.handle)}
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
-                    selectedCategory === cat
+                    selectedCollection === col.node.handle
                       ? "bg-primary text-primary-foreground border-primary"
                       : "bg-secondary text-secondary-foreground border-border hover:border-primary/50"
                   }`}
                 >
-                  {cat}
+                  {col.node.title}
                 </button>
               ))}
             </div>
@@ -105,7 +129,7 @@ export default function ShopCatalogPage() {
         </div>
 
         <div className="mt-10">
-          {loading ? (
+          {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-10 h-10 animate-spin text-primary" />
             </div>
