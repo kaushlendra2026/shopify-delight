@@ -1,78 +1,61 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  fetchProducts,
-  fetchCollections,
-  fetchCollectionProducts,
-  type ShopifyProduct,
-  type ShopifyCollection,
-} from "@/lib/shopify";
+import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
 import ProductCard from "@/components/ProductCard";
 import DeliveryCounter from "@/components/DeliveryCounter";
 import { Input } from "@/components/ui/input";
 import { Loader2, Package, Search, LayoutGrid } from "lucide-react";
 
 export default function ShopCatalogPage() {
-  const [allProducts, setAllProducts] = useState<ShopifyProduct[]>([]);
-  const [displayProducts, setDisplayProducts] = useState<ShopifyProduct[]>([]);
-  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
+  const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filterLoading, setFilterLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [selectedCollection, setSelectedCollection] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // Load all products + collections on mount
   useEffect(() => {
-    const load = async () => {
+    const loadProducts = async () => {
       try {
-        const [products, cols] = await Promise.all([
-          fetchProducts(60),
-          fetchCollections(20),
-        ]);
-        setAllProducts(products);
-        setDisplayProducts(products);
-        setCollections(cols);
+        const data = await fetchProducts(60);
+        setProducts(data);
       } catch (err) {
-        console.error("Failed to fetch data:", err);
+        console.error("Failed to fetch products:", err);
         setError("Failed to load products");
       } finally {
         setLoading(false);
       }
     };
-    load();
+    loadProducts();
   }, []);
 
-  // Handle collection filter change
-  const handleCollectionChange = async (handle: string) => {
-    setSelectedCollection(handle);
-    if (handle === "All") {
-      setDisplayProducts(allProducts);
-      return;
-    }
-    setFilterLoading(true);
-    try {
-      const products = await fetchCollectionProducts(handle, 60);
-      setDisplayProducts(products);
-    } catch (err) {
-      console.error("Failed to fetch collection products:", err);
-      setDisplayProducts([]);
-    } finally {
-      setFilterLoading(false);
-    }
-  };
-
-  // Search filter on top of current display
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return displayProducts;
-    return displayProducts.filter((p) => {
-      const title = p.node.title?.toLowerCase() ?? "";
-      const desc = p.node.description?.toLowerCase() ?? "";
-      return title.includes(q) || desc.includes(q);
+  const categories = useMemo(() => {
+    const types = new Set<string>();
+    products.forEach((p) => {
+      const type = p.node.productType?.trim();
+      if (type) types.add(type);
     });
-  }, [displayProducts, query]);
+    return ["All", ...Array.from(types).sort()];
+  }, [products]);
 
-  const isLoading = loading || filterLoading;
+  const filtered = useMemo(() => {
+    let result = products;
+
+    if (selectedCategory !== "All") {
+      result = result.filter(
+        (p) => p.node.productType?.trim() === selectedCategory
+      );
+    }
+
+    const q = query.trim().toLowerCase();
+    if (q) {
+      result = result.filter((p) => {
+        const title = p.node.title?.toLowerCase() ?? "";
+        const desc = p.node.description?.toLowerCase() ?? "";
+        return title.includes(q) || desc.includes(q);
+      });
+    }
+
+    return result;
+  }, [products, query, selectedCategory]);
 
   return (
     <section className="py-16 md:py-24">
@@ -85,7 +68,6 @@ export default function ShopCatalogPage() {
           <DeliveryCounter className="mt-5" />
         </header>
 
-        {/* Search + Filters */}
         <div className="mt-8 space-y-4">
           <div className="relative w-full max-w-md">
             <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -97,31 +79,20 @@ export default function ShopCatalogPage() {
             />
           </div>
 
-          {/* Collection Filters */}
-          {collections.length > 0 && (
+          {categories.length > 1 && (
             <div className="flex items-center gap-2 flex-wrap">
               <LayoutGrid className="w-4 h-4 text-muted-foreground mr-1" />
-              <button
-                onClick={() => handleCollectionChange("All")}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
-                  selectedCollection === "All"
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-secondary text-secondary-foreground border-border hover:border-primary/50"
-                }`}
-              >
-                All
-              </button>
-              {collections.map((col) => (
+              {categories.map((cat) => (
                 <button
-                  key={col.node.id}
-                  onClick={() => handleCollectionChange(col.node.handle)}
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
-                    selectedCollection === col.node.handle
+                    selectedCategory === cat
                       ? "bg-primary text-primary-foreground border-primary"
                       : "bg-secondary text-secondary-foreground border-border hover:border-primary/50"
                   }`}
                 >
-                  {col.node.title}
+                  {cat}
                 </button>
               ))}
             </div>
@@ -129,7 +100,7 @@ export default function ShopCatalogPage() {
         </div>
 
         <div className="mt-10">
-          {isLoading ? (
+          {loading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-10 h-10 animate-spin text-primary" />
             </div>
