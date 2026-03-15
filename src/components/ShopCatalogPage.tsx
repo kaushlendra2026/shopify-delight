@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
 import ProductCard from "@/components/ProductCard";
+import DeliveryCounter from "@/components/DeliveryCounter";
 import { Input } from "@/components/ui/input";
 import { Loader2, Package, Search, LayoutGrid } from "lucide-react";
 
@@ -67,6 +68,7 @@ export default function ShopCatalogPage() {
           <p className="text-muted-foreground mt-3">
             Browse the full catalog of premium 3D printed collectibles.
           </p>
+          <DeliveryCounter className="mt-5" />
         </header>
 
         {/* Search + Filters */}

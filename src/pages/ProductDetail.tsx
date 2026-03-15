@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchProductByHandle, CartItem, ShopifyProduct, buyNowCheckout } from '@/lib/shopify';
 import RelatedProducts from '@/components/RelatedProducts';
+import DeliveryCounter from '@/components/DeliveryCounter';
 import { useCartStore } from '@/stores/cartStore';
 import { ArrowLeft, ShoppingCart, Loader2, Minus, Plus, Zap } from 'lucide-react';
 import { toast } from 'sonner';
@@ -240,6 +241,8 @@ const ProductDetail = () => {
                 <span className="text-destructive text-sm">Out of Stock</span>
               )}
             </div>
+
+            <DeliveryCounter className="mt-6" />
           </div>
         </div>
 
