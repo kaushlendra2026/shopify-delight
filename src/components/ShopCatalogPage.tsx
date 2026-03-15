@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchProducts, type ShopifyProduct } from "@/lib/shopify";
 import ProductCard from "@/components/ProductCard";
+import DeliveryCounter from "@/components/DeliveryCounter";
 import { Input } from "@/components/ui/input";
 import { Loader2, Package, Search, LayoutGrid } from "lucide-react";
 
