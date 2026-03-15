@@ -68,6 +68,7 @@ export default function ShopCatalogPage() {
           <p className="text-muted-foreground mt-3">
             Browse the full catalog of premium 3D printed collectibles.
           </p>
+          <DeliveryCounter className="mt-5" />
         </header>
 
         {/* Search + Filters */}

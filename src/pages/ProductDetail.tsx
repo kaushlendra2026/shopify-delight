@@ -241,6 +241,8 @@ const ProductDetail = () => {
                 <span className="text-destructive text-sm">Out of Stock</span>
               )}
             </div>
+
+            <DeliveryCounter className="mt-6" />
           </div>
         </div>
 
