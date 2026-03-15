@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchProductByHandle, CartItem, ShopifyProduct, buyNowCheckout } from '@/lib/shopify';
 import RelatedProducts from '@/components/RelatedProducts';
+import DeliveryCounter from '@/components/DeliveryCounter';
 import { useCartStore } from '@/stores/cartStore';
 import { ArrowLeft, ShoppingCart, Loader2, Minus, Plus, Zap } from 'lucide-react';
 import { toast } from 'sonner';
