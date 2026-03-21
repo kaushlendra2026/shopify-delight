@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 import ProductCard from './ProductCard';
+import DeliveryCounter from './DeliveryCounter';
 import { Loader2, Package } from 'lucide-react';
 
 const ProductsSection = () => {
