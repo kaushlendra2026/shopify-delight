@@ -46,6 +46,7 @@ const ProductsSection = () => {
             Each piece is meticulously designed and 3D printed with premium materials
             for collectors who demand excellence.
           </p>
+          <DeliveryCounter count={5000} className="mt-5 mx-auto" />
         </div>
 
         {/* Products Grid */}
