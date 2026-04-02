@@ -34,7 +34,7 @@ function useAnimatedCounter(target: number, duration: number = 2000, start: bool
   return value;
 }
 
-export default function DeliveryCounter({ count = 1250, label = "Products Delivered", className = "" }: DeliveryCounterProps) {
+export default function DeliveryCounter({ count = 5000, label = "Products Delivered", className = "" }: DeliveryCounterProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const animatedCount = useAnimatedCounter(count, 2200, isInView);
