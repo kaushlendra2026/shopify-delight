@@ -1,8 +1,5 @@
-```jsx id="v7n4ks"
-import { useState } from "react";
-import { X } from "lucide-react";
-
-const AMAZON_URL = "https://amzn.in/d/06uRIQsp";
+```jsx id="z7m4pa"
+import React, { useState } from "react";
 
 export default function AmazonFloatingBadge() {
   const [visible, setVisible] = useState(true);
@@ -11,56 +8,49 @@ export default function AmazonFloatingBadge() {
 
   return (
     <div
-      className="
-        fixed
-        bottom-4
-        left-1/2
-        -translate-x-1/2
-        z-50
-        px-4
-      "
+      style={{
+        position: "fixed",
+        bottom: "20px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 9999,
+      }}
     >
-      <div className="relative">
+      <div style={{ position: "relative" }}>
 
         <a
-          href={AMAZON_URL}
+          href="https://amzn.in/d/06uRIQsp"
           target="_blank"
           rel="noopener noreferrer"
-          className="block hover:scale-105 transition duration-300"
         >
           <img
             src="/amazon-badge.png"
             alt="Available on Amazon"
-            className="
-              w-[240px]
-              sm:w-[300px]
-              md:w-[360px]
-              lg:w-[400px]
-              h-auto
-              rounded-full
-              shadow-lg
-            "
+            style={{
+              width: "320px",
+              maxWidth: "90vw",
+              height: "auto",
+              display: "block",
+            }}
           />
         </a>
 
         <button
           onClick={() => setVisible(false)}
-          className="
-            absolute
-            -top-2
-            -right-2
-            w-7
-            h-7
-            rounded-full
-            bg-white
-            border
-            shadow
-            flex
-            items-center
-            justify-center
-          "
+          style={{
+            position: "absolute",
+            top: "-8px",
+            right: "-8px",
+            width: "28px",
+            height: "28px",
+            borderRadius: "999px",
+            border: "1px solid #ddd",
+            background: "#fff",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
         >
-          <X size={14} />
+          ×
         </button>
 
       </div>
