@@ -6,6 +6,7 @@ import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import AnnouncementBar from '@/components/AnnouncementBar';
+import AmazonFloatingBadge from '@/components/AmazonFloatingBadge';
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <TestimonialsSection />
       <ContactSection />
       <Footer />
+      <AmazonFloatingBadge />
     </div>
   );
 };
