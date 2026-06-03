@@ -20,7 +20,7 @@ const AmazonFloatingBadge = () => {
           <img
             src="/amazon-badge.png"
             alt="Also available on Amazon"
-            className="h-24 sm:h-32 md:h-40 w-auto"
+            className="h-16 sm:h-20 md:h-24 w-auto"
           />
         </a>
         <button
