@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import amazonBadge from '@/assets/amazon-badge.png.asset.json';
 
 const AMAZON_URL = 'https://amzn.in/d/06uRIQsp';
 
@@ -19,9 +18,9 @@ const AmazonFloatingBadge = () => {
           className="block transition-transform duration-300 hover:scale-105 drop-shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
         >
           <img
-            src={amazonBadge.url}
+            src="/amazon-badge.png"
             alt="Also available on Amazon"
-            className="h-14 sm:h-16 md:h-20 w-auto"
+            className="h-16 sm:h-20 md:h-24 w-auto"
           />
         </a>
         <button
