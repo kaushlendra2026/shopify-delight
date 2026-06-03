@@ -20,7 +20,7 @@ const AmazonFloatingBadge = () => {
           <img
             src="/amazon-badge.png"
             alt="Also available on Amazon"
-            className="h-[15%] sm:h-[26%] md:h-[28%] w-auto object-contain"
+            className="h-[10%] sm:h-[26%] md:h-[28%] w-auto object-contain"
           />
         </a>
         <button
@@ -29,7 +29,7 @@ const AmazonFloatingBadge = () => {
             setVisible(false);
           }}
           aria-label="Dismiss"
-          className="absolute -top-80% -right-30% w-6 h-6 rounded-full bg-background border border-border flex items-center justify-center text-foreground hover:bg-muted transition-colors"
+          className="absolute -top-1 -right-2 w-6 h-6 rounded-full bg-background border border-border flex items-center justify-center text-foreground hover:bg-muted transition-colors"
         >
           <X className="w-3.5 h-3.5" />
         </button>
