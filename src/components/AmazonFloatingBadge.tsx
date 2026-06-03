@@ -1,4 +1,4 @@
-```jsx id="z7m4pa"
+
 import React, { useState } from "react";
 
 export default function AmazonFloatingBadge() {
@@ -57,4 +57,3 @@ export default function AmazonFloatingBadge() {
     </div>
   );
 }
-```
